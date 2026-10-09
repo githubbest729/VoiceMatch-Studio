@@ -1,43 +1,108 @@
-# VoiceMatch Studio
+Here is the heavily upgraded `README.md`. It now includes visual icons, a clear breakdown of the system architecture, a workflow status table, the recent v2 update logs, and a dedicated section explaining its exact purpose for the Founder's Associate workflow.
 
-Local-first LinkedIn feed simulator and founder post staging engine for ghostwriters and founder's associates. Vanilla HTML, CSS and JavaScript. No dependencies, no tracking, works offline as a PWA.
 
-## Features
+# 🎙️ VoiceMatch Studio
 
-- **Split-screen editor and feed preview** with live character, word and reading-time counters.
-- **Mobile and desktop viewport toggle** (narrow phone card or 550px desktop card).
-- **"See more" cutoff line.** Approximates LinkedIn's fold: 3 lines on mobile, 5 on desktop. The hook zone is highlighted.
-- **Buzzword and "AI smell" scanner.** Flags words like *delve*, *tapestry*, *leverage* as you type. Manage your own list in the Banned words dialog.
-- **Copy for LinkedIn.** Normalises whitespace and keeps paragraph breaks so the paste doesn't collapse.
-- **Weekly planner.** Five slots, Monday to Friday, autosaved in `localStorage`.
-- **Profile.** Name, headline and photo (stored as a data URL) for the preview card.
-- **Export / import** drafts, banned words and profile as JSON.
+![Version](https://img.shields.io/badge/version-2.0-blue) ![Architecture](https://img.shields.io/badge/architecture-local--first-success) ![Tech](https://img.shields.io/badge/tech-Vanilla_JS-orange)
 
-## Run locally
+Local-first LinkedIn feed simulator and founder post staging engine. Built with Vanilla HTML, CSS, and JavaScript. Zero dependencies, no tracking, and fully functional offline as a Progressive Web App (PWA).
+
+---
+
+## 🎯 Purpose & Use Cases
+
+VoiceMatch Studio is a specialized content operating system built specifically for **Founder's Associates, Executive Assistants, and Ghostwriters** managing high-stakes LinkedIn accounts. 
+
+**Core Uses:**
+*   **Preventing Truncation:** Visually test the "hook" (the first 140–210 characters) before LinkedIn automatically chops off the text with a "...see more" button.
+*   **Weekly Consistency:** Plan, stage, and track a 5-day posting schedule across a single dashboard so executive marketing never stalls.
+*   **Voice Continuity:** Store "Golden Posts" and strict style rules (e.g., "Sentences under 15 words") locally to ensure the founder's authentic voice doesn't drift into generic AI-speak.
+
+---
+
+## 🏗️ System Architecture
+
+VoiceMatch Studio operates entirely in the browser. No external databases, no API calls, and zero data leaves your machine.
+
+*   **Frontend Engine:** ES6 JavaScript, Semantic HTML5, and CSS3 (using CSS Variables for immediate Dark/Light theme switching).
+*   **Data Layer (Storage):** 100% `localStorage` (Schema v2). Saves slot states, text histories, custom banned words, and base64 image data directly in your browser cache.
+*   **Offline Layer (PWA):** A cache-first Service Worker (`sw.js`) intercepts network requests, ensuring the application loads instantly even on a flight without Wi-Fi.
+*   **Deployment:** Static file hosting capable. Compatible with GitHub Pages, Vercel, Netlify, or AWS S3.
+
+---
+
+## 📊 Workflow Status Tracking
+
+The app uses a 5-slot weekly pipeline (Monday–Friday). Each slot tracks the lifecycle of a post using the following architecture:
+
+| Status Indicator | UI Color | Workflow Stage & Meaning |
+| :--- | :--- | :--- |
+| **Empty** | ⚪ Grey | Slot is unassigned. Drop raw ideas, notes, or AI-generated outlines here. |
+| **Draft** | 🟡 Amber | Actively writing. Banned-word scanner is running; visual hook is being tested. |
+| **Ready** | 🟢 Green | Post is formatted, visually checked, approved by the founder, and ready to go. |
+| **Posted**| 🔵 Blue | Content has been successfully published to LinkedIn. |
+
+---
+
+## ✨ Features
+
+- 🌗 **Dark/Light Mode:** System-aware theme toggle for comfortable writing at any hour.
+- 📱 **Split-Screen Feed Preview:** Live character, word, and reading-time counters alongside a pixel-perfect LinkedIn feed simulation.
+- ✂️ **"See More" Cutoff Line:** Approximates LinkedIn's fold (3 lines on mobile, 5 on desktop). The hook zone is aggressively highlighted.
+- 🚨 **"AI Smell" Scanner:** Automatically flags generic corporate filler (e.g., *delve*, *tapestry*, *leverage*) as you type.
+- 📂 **Voice Bank & Playbook:** Slide-out drawers to store tone rules, content pillars, and historic high-performing reference posts.
+- 🖼️ **Media Staging:** Drag-and-drop image or PDF carousel staging for visual checking alongside text.
+- 📋 **Format-Preserving Copy:** Normalizes whitespace and keeps paragraph breaks so your text doesn't collapse into a wall of text when pasted into LinkedIn.
+- 💾 **Export / Import:** Download your entire week's pipeline, profile data, and playbook as a local JSON file.
+
+---
+
+## 📝 Update Logs (v2.0)
+
+*   **[Feature]** Complete UI overhaul mimicking LinkedIn's native dark mode.
+*   **[Feature]** Added the Voice Bank & Playbook data layers.
+*   **[Feature]** Added state-management dots (Empty/Draft/Ready/Posted) to day tabs.
+*   **[Feature]** Upgraded text editor to support a Unicode formatting toolbar (Bold, Italic, Bullets).
+*   **[Architecture]** Migrated JSON export schema to `v2` to support arrays of post history and media aspects.
+
+---
+
+## 🚀 Run Locally
 
 ```bash
-npm run serve        # or: python3 -m http.server 8080
+npm run serve        
+# OR use native python:
+python3 -m http.server 8080
+
 ```
 
-Open http://localhost:8080. Service workers need `localhost` or HTTPS.
+Open `http://localhost:8080`. *Note: Service workers require `localhost` or HTTPS to function properly.*
 
-## Deploy
+## 🌍 Deploy
 
-**GitHub Pages:** push to `main`, then in the repository go to *Settings → Pages → Source: GitHub Actions*. The included workflow publishes the site.
+**GitHub Pages:** Push to `main`, then navigate to your repository's *Settings → Pages → Source: GitHub Actions*. The included `.github/workflows/deploy.yml` will automatically publish the site.
 
-**Vercel / Netlify / Cloudflare Pages:** import the repo. No build step; the publish directory is the repo root. `vercel.json`, `netlify.toml` and `_headers` are included.
+**Vercel / Netlify / Cloudflare Pages:** Import the repository. There is no build step required; the publish directory is the repository root. Configuration files (`vercel.json`, `netlify.toml`, and `_headers`) are pre-included.
 
-## Before you publish
+## ⚠️ Pre-Launch Checklist
 
-- Replace `YOUR-USERNAME` in `robots.txt`, `sitemap.xml` and `.well-known/security.txt`.
-- Update the contact and expiry in `.well-known/security.txt`.
-- `.well-known/assetlinks.json` is a template for an Android Trusted Web Activity. Fill in your package name and signing fingerprint, or delete it.
-- If the site lives at a subpath (GitHub Pages project sites), the app's relative paths work as-is. The `404.html` stylesheet link uses an absolute path, so change it to match your base path.
+* Replace `YOUR-USERNAME` in `robots.txt`, `sitemap.xml`, and `.well-known/security.txt`.
+* Update the contact and expiry information in `.well-known/security.txt`.
+* `.well-known/assetlinks.json` serves as a template for an Android Trusted Web Activity (TWA). Fill in your package name and signing fingerprint, or delete it if you aren't deploying to the Google Play Store.
 
-## Limits
+## ⚖️ License & Limits
 
-The "see more" cutoff is an approximation based on average characters per line. LinkedIn's real fold depends on font metrics, device width and line breaks, so check important posts in the real composer.
+**Limits:** The "see more" cutoff is an approximation based on average characters per line. LinkedIn's real fold heavily depends on font metrics, device width, and specific line breaks. Always double-check critical posts in the native composer.
 
-## License
+**License:** MIT
 
-MIT
+```
+
+Once pasted, save the file and run these commands in your Codespace terminal to push the new documentation live:
+
+```bash
+git add README.md
+git commit -m "Update README: Add architecture, workflow chart, and v2 logs"
+git push origin main
+
+```
