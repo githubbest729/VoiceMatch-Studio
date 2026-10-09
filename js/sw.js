@@ -1,4 +1,4 @@
-const CACHE = 'voicematch-v1';
+const CACHE = 'voicematch-v3';
 const SHELL = [
   './', 'index.html', 'offline.html', '404.html', 'privacy.html', 'terms.html',
   'css/style.css', 'js/app.js', 'js/sw-register.js', 'manifest.webmanifest',
