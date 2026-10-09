@@ -97,9 +97,7 @@ Open `http://localhost:8080`. *Note: Service workers require `localhost` or HTTP
 
 Once pasted, save the file and run these commands in your Codespace terminal to push the new documentation live:
 
-```
+```bash
 git add README.md
 git commit -m "Update README: Add architecture, workflow chart, and v2 logs"
 git push origin main
-
-```
