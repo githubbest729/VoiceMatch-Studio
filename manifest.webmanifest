@@ -1,0 +1,35 @@
+{
+  "name": "VoiceMatch Studio",
+  "short_name": "VoiceMatch",
+  "description": "Local-first LinkedIn feed simulator and founder post staging engine.",
+  "id": "./",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#F4F2EE",
+  "theme_color": "#0A66C2",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["productivity", "business", "social"],
+  "icons": [
+    { "src": "icons/icon-16x16.png", "sizes": "16x16", "type": "image/png" },
+    { "src": "icons/icon-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "icons/icon-48x48.png", "sizes": "48x48", "type": "image/png" },
+    { "src": "icons/icon-152x152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "icons/icon-180x180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "icons/screenshot-narrow.png", "sizes": "540x960", "type": "image/png", "form_factor": "narrow", "label": "Mobile feed preview" },
+    { "src": "icons/screenshot-wide.png", "sizes": "1280x720", "type": "image/png", "form_factor": "wide", "label": "Split-screen editor and preview" }
+  ],
+  "shortcuts": [
+    { "name": "New Monday post", "short_name": "Monday", "url": "./?slot=0", "icons": [{ "src": "icons/icon-192x192.png", "sizes": "192x192" }] },
+    { "name": "Open planner", "short_name": "Planner", "url": "./?source=shortcut", "icons": [{ "src": "icons/icon-192x192.png", "sizes": "192x192" }] }
+  ]
+}
