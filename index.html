@@ -57,19 +57,44 @@
         <button id="btnClear" class="btn ghost small" type="button">Clear</button>
       </div>
     </div>
-    <details class="history">
-      <summary id="histLine">No status changes yet</summary>
-      <ol id="histList" class="hist-list"></ol>
-    </details>
+    <div class="history-row">
+      <details class="history">
+        <summary id="histLine">No status changes yet</summary>
+        <div class="hist-cols">
+          <div>
+            <h4 class="hist-h">Status changes</h4>
+            <ol id="histList" class="hist-list"></ol>
+          </div>
+          <div>
+            <h4 class="hist-h">Saved versions</h4>
+            <ol id="verList" class="hist-list"></ol>
+            <p id="verEmpty" class="muted small-text">No earlier versions yet. They are saved automatically as you pause typing.</p>
+          </div>
+        </div>
+      </details>
+      <button id="btnRestore" class="btn small restore" type="button" disabled>↶ Restore previous version</button>
+    </div>
+
+    <div class="type-row" role="group" aria-label="Post type">
+      <span class="type-label">Post type</span>
+      <div id="typeChips" class="chip-row">
+        <button type="button" class="chip" data-type="insight" aria-pressed="false">Insight</button>
+        <button type="button" class="chip" data-type="story" aria-pressed="false">Story</button>
+        <button type="button" class="chip" data-type="question" aria-pressed="false">Question</button>
+        <button type="button" class="chip" data-type="contrarian" aria-pressed="false">Contrarian</button>
+        <button type="button" class="chip" data-type="carousel" aria-pressed="false">Carousel teaser</button>
+      </div>
+    </div>
+    <p id="typeHint" class="type-hint"></p>
 
     <div class="toolbar" role="toolbar" aria-label="Formatting">
-      <button type="button" data-fmt="bold" title="Bold (Unicode)" aria-label="Bold"><b>B</b></button>
-      <button type="button" data-fmt="italic" title="Italic (Unicode)" aria-label="Italic"><i>I</i></button>
-      <button type="button" data-fmt="plain" title="Remove Unicode styling" aria-label="Remove styling">Aa</button>
-      <span class="sep"></span>
-      <button type="button" data-bullet="•" title="Bullet" aria-label="Bullet">•</button>
-      <button type="button" data-bullet="➔" title="Arrow" aria-label="Arrow bullet">➔</button>
-      <button type="button" data-bullet="✦" title="Star" aria-label="Star bullet">✦</button>
+      <button type="button" data-fmt="bold" title="Bold (Ctrl/⌘+B)"><span class="ico ico-b" aria-hidden="true">B</span>Bold</button>
+      <button type="button" data-fmt="italic" title="Italic (Ctrl/⌘+I)"><span class="ico ico-i" aria-hidden="true">I</span>Italic</button>
+      <button type="button" data-fmt="plain" title="Remove bold/italic styling from the selection"><span class="ico" aria-hidden="true">✕</span>Clear style</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" data-bullet="•" title="Turn selected lines into • bullets"><span class="ico" aria-hidden="true">•</span>Bullet</button>
+      <button type="button" data-bullet="➔" title="Turn selected lines into ➔ points"><span class="ico" aria-hidden="true">➔</span>Arrow</button>
+      <button type="button" data-bullet="✦" title="Turn selected lines into ✦ points"><span class="ico" aria-hidden="true">✦</span>Star</button>
     </div>
 
     <div class="editor-wrap">
@@ -82,16 +107,19 @@
       <span><b id="statWords">0</b> words</span>
       <span><b id="statRead">0</b> sec read</span>
       <span id="statFlags" class="flags ok">0 flagged</span>
+      <span id="saveInd" class="save-ind" aria-hidden="true">✓ Autosaved</span>
     </div>
     <div id="flagList" class="flag-list"></div>
 
     <details id="refBox" class="ref-box">
-      <summary>Voice reference</summary>
+      <summary id="refSummary">Voice reference</summary>
+      <h4 class="ref-h">From the founder's Golden Posts</h4>
       <div id="refEmpty" class="muted small-text">No Golden Posts yet. Add 3–5 in the Voice Bank to keep the founder's tone in view while you draft.</div>
-      <div id="refBody" hidden>
-        <select id="refSelect" aria-label="Golden post"></select>
-        <div id="refText" class="ref-text"></div>
-      </div>
+      <div id="refExamples" class="ref-examples"></div>
+      <button id="refMore" class="btn ghost small" type="button" hidden>Show other examples</button>
+      <h4 class="ref-h">Calibration check <span class="muted small-text">(rules from your Playbook)</span></h4>
+      <ul id="refChecks" class="checks"></ul>
+      <p id="refChecksEmpty" class="muted small-text" hidden>No style rules yet. Add one per line under Playbook → Style.</p>
     </details>
 
     <div id="drop" class="drop" tabindex="0" role="button" aria-label="Add an image or PDF carousel">
@@ -115,6 +143,7 @@
     </details>
 
     <button id="btnCopy" class="btn primary" type="button">Copy for LinkedIn</button>
+    <p id="shortcutHint" class="shortcut-hint"></p>
   </section>
 
   <section class="pane preview-pane" aria-label="Preview">
