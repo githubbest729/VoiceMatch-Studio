@@ -19,16 +19,26 @@
   // lines = where LinkedIn folds the post; cpl is only a fallback when layout can't be measured.
   var VIEW = { mobile: { lines: 3, cpl: 44, label: 'Mobile fold · 3 lines' }, desktop: { lines: 5, cpl: 72, label: 'Desktop fold · 5 lines' } };
   var LINE_HEIGHT = 20;
+  var MAX_VERSIONS = 20;
+  var TYPES = {
+    insight: { label: 'Insight', short: 'Insight', hint: 'Open with the takeaway, then one proof point. End with what changes for the reader.' },
+    story: { label: 'Story', short: 'Story', hint: 'Start in the middle of the moment. Keep it to one scene and one lesson.' },
+    question: { label: 'Question', short: 'Question', hint: 'Ask something the audience can answer in one line. Share your own take in the first comment.' },
+    contrarian: { label: 'Contrarian', short: 'Contrarian', hint: 'State the common belief, then why it is wrong. Back it with one specific example.' },
+    carousel: { label: 'Carousel teaser', short: 'Carousel', hint: 'Tease the payoff in the first two lines, then point to the slides. Keep the hook under three lines.' }
+  };
 
   var $ = function (id) { return document.getElementById(id); };
   var view = 'mobile';
   var media = [null, null, null, null, null];
-  var refIdx = 0;
+  var refOffset = 0;
+  var IS_MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
+  var MOD = IS_MAC ? '⌘' : 'Ctrl';
 
   /* ---------------- State ---------------- */
 
   function uid() { return 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-  function newSlot() { return { text: '', comment: '', status: 'draft', history: [] }; }
+  function newSlot() { return { text: '', comment: '', status: 'draft', type: '', history: [], versions: [], checks: {} }; }
   function blank() {
     return {
       v: 2, active: 0, aspect: ASPECTS[0], custom: [], voice: [],
@@ -41,6 +51,11 @@
       }
     };
   }
+  function cleanChecks(c) {
+    var out = {};
+    if (c && typeof c === 'object') Object.keys(c).slice(0, 20).forEach(function (k) { if (c[k] === true) out[k] = true; });
+    return out;
+  }
   // Accepts v2 data, v1 data (drafts[]/comments[]) or an import file; always returns a safe v2 object.
   function normalize(d) {
     var b = blank(); d = d && typeof d === 'object' ? d : {};
@@ -52,8 +67,12 @@
       return {
         text: String(s.text || ''), comment: String(s.comment || ''),
         status: STATUS[s.status] ? s.status : 'draft',
+        type: TYPES[s.type] ? s.type : '',
         history: (Array.isArray(s.history) ? s.history : []).filter(function (h) { return h && STATUS[h.s] && isFinite(h.at); })
-          .map(function (h) { return { s: h.s, at: +h.at }; }).slice(-30)
+          .map(function (h) { return { s: h.s, at: +h.at }; }).slice(-30),
+        versions: (Array.isArray(s.versions) ? s.versions : []).filter(function (v) { return v && typeof v.text === 'string' && v.text.trim() && isFinite(v.at); })
+          .map(function (v) { return { text: v.text, comment: String(v.comment || ''), at: +v.at }; }).slice(-MAX_VERSIONS),
+        checks: cleanChecks(s.checks)
       };
     });
     b.active = Math.min(4, Math.max(0, d.active | 0));
@@ -77,9 +96,14 @@
     } catch (e) {}
     return blank();
   }
-  var saveFailed = false;
+  var saveFailed = false, saveFlashTimer;
+  function flashSaved() {
+    var el = $('saveInd'); if (!el) return;
+    el.classList.add('on');
+    clearTimeout(saveFlashTimer); saveFlashTimer = setTimeout(function () { el.classList.remove('on'); }, 1400);
+  }
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify(state)); saveFailed = false; }
+    try { localStorage.setItem(KEY, JSON.stringify(state)); saveFailed = false; flashSaved(); }
     catch (e) { if (!saveFailed) { saveFailed = true; toast('Could not save. Browser storage may be full or blocked.'); } }
   }
   var state = load();
@@ -113,7 +137,7 @@
     return res + esc(text.slice(last));
   }
   function forLinkedIn(text) {
-    return text.replace(/\r\n?/g, '\n').replace(/[   ]/g, ' ')
+    return text.replace(/\r\n?/g, '\n').replace(/[\u00A0\u2007\u202F]/g, ' ')
       .replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
   }
   function fmtTime(ts) {
@@ -162,7 +186,7 @@
   }
   function syncEditor() {
     var text = slot().text;
-    $('hl').innerHTML = highlight(text) + '​';
+    $('hl').innerHTML = highlight(text) + '\u200b';
     autoGrow();
 
     var words = (text.trim().match(/\S+/g) || []).length;
@@ -253,7 +277,7 @@
   /* ---------------- Tabs, status, history ---------------- */
 
   function firstWords(text) {
-    var w = text.replace(/​/g, '').trim().split(/\s+/).filter(Boolean);
+    var w = text.replace(/\u200b/g, '').trim().split(/\s+/).filter(Boolean);
     return w.length ? w.slice(0, 3).join(' ') + (w.length > 3 ? '…' : '') : 'Empty';
   }
   function renderSlots() {
