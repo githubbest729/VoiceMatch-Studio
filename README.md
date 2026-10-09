@@ -93,7 +93,6 @@ Open `http://localhost:8080`. *Note: Service workers require `localhost` or HTTP
 
 **License:** MIT
 
-```bash
 
 Once pasted, save the file and run these commands in your Codespace terminal to push the new documentation live:
 
