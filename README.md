@@ -1,6 +1,3 @@
-Here is the heavily upgraded `README.md`. It now includes visual icons, a clear breakdown of the system architecture, a workflow status table, the recent v2 update logs, and a dedicated section explaining its exact purpose for the Founder's Associate workflow.
-
-
 # 🎙️ VoiceMatch Studio
 
 ![Version](https://img.shields.io/badge/version-2.0-blue) ![Architecture](https://img.shields.io/badge/architecture-local--first-success) ![Tech](https://img.shields.io/badge/tech-Vanilla_JS-orange)
@@ -100,7 +97,7 @@ Open `http://localhost:8080`. *Note: Service workers require `localhost` or HTTP
 
 Once pasted, save the file and run these commands in your Codespace terminal to push the new documentation live:
 
-```bash
+```
 git add README.md
 git commit -m "Update README: Add architecture, workflow chart, and v2 logs"
 git push origin main
